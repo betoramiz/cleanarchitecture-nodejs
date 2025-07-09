@@ -50,11 +50,12 @@ export class UserRepository implements IUserRepository {
 
   async create(user: InputUser): Promise<Result<number, ErrorMessage>> {
     try {
-      const result = await db
+      const [result] = await db
         .insert(usersTable)
-        .values(user);
+        .values(user)
+        .returning({ createdId: usersTable.id });
 
-      return Ok(result.oid);
+      return Ok(result.createdId);
     } catch (error) {
       return Err(this.errorMessage);
     }
