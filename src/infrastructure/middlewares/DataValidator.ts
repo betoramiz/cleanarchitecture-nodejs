@@ -1,5 +1,5 @@
 ﻿import { Request, Response, NextFunction } from 'express';
-import { ErrorMessage } from "../common/response";
+import { ErrorMessage } from "../../shared/response";
 import { ZodError, ZodObject } from "zod";
 
 export const validateData = (schema: ZodObject<any>) => (req: Request, res: Response, next: NextFunction) => {

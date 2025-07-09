@@ -1,13 +1,5 @@
 ﻿import { ZodError, ZodIssue } from "zod";
 
-// export interface Response {
-//   success: boolean;
-// }
-
-// export interface SuccessResponse<T> extends Response {
-//   data: T;
-// }
-
 export interface ErrorMessage {
   name: string;
   description: string;
