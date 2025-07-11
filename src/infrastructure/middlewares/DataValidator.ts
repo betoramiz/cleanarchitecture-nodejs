@@ -1,15 +1,15 @@
 ﻿import { Request, Response, NextFunction } from 'express';
-import { ErrorMessage } from "../../shared/response";
-import { ZodError, ZodObject } from "zod";
+import { ErrorMessage } from "@shared/response";
+import { z } from "zod/v4";
 
-export const validateData = (schema: ZodObject<any>) => (req: Request, res: Response, next: NextFunction) => {
+export const validateData = (schema: z.ZodObject<any>) => (req: Request, res: Response, next: NextFunction) => {
   try {
     schema.parse(req.body);
     next();
   } catch (error) {
     let issues: any;
-    if(error instanceof ZodError) {
-      issues = error.errors.map<ErrorMessage>(e => ({
+    if(error instanceof z.ZodError) {
+      issues = error.issues.map<ErrorMessage>(e => ({
         name: e.path[0].toString(),
         description: e.message
       }));

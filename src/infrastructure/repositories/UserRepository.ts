@@ -1,10 +1,10 @@
-﻿import { IUserRepository } from "../../application/users/repository";
-import { InputUser, IUser } from "../../domain/users/user";
-import { db } from '../dbConfig';
-import { usersTable } from "../../domain/users/users.schema";
+﻿import { db } from '../dbConfig';
 import { eq } from "drizzle-orm";
 import { Err, Ok, Result } from "ts-results";
-import { ErrorMessage } from "../../shared/response";
+import { usersTable } from "@domain/users/users.schema";
+import { InsertUser, IUser } from "@domain/users/user";
+import { IUserRepository } from "@application/users/repository";
+import { ErrorMessage } from "@shared/response";
 
 export class UserRepository implements IUserRepository {
   private errorMessage: ErrorMessage = { name: 'Database Error', description: 'Something failure in the database'};
@@ -48,7 +48,7 @@ export class UserRepository implements IUserRepository {
     }
   }
 
-  async create(user: InputUser): Promise<Result<number, ErrorMessage>> {
+  async create(user: InsertUser): Promise<Result<number, ErrorMessage>> {
     try {
       const [result] = await db
         .insert(usersTable)

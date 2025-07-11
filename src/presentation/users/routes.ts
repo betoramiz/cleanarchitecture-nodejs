@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { validateData } from "../../infrastructure/middlewares/DataValidator";
-import { validationRequest as createValidationRequest } from '../../application/users/usecases/create';
-import { userController } from '../../infrastructure/dependencies';
+import { validateData } from "@middlewares/DataValidator";
+import { validationRequest as createValidationRequest } from '@application/users/usecases/create';
+import { userController } from "@infra/dependencies";
 
 const router = Router();
 

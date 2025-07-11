@@ -23,6 +23,7 @@
   "dependencies": {
     "dotenv": "^17.0.1",
     "drizzle-orm": "^0.44.2",
+    "drizzle-zod": "^0.8.2",
     "express": "^5.1.0",
     "inversify": "^7.5.4",
     "pg": "^8.16.3",

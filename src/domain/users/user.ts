@@ -7,15 +7,15 @@ export interface IUser {
   email: string;
 }
 
-export type InputUser = typeof usersTable.$inferInsert;
+export type InsertUser = typeof usersTable.$inferInsert;
 
 export class User {
-  private readonly user: InputUser;
-  constructor(user: InputUser) {
+  private readonly user: IUser;
+  constructor(user: InsertUser) {
     this.user = user;
   }
 
-  static create(user: InputUser): IUser {
+  static create(user: InsertUser): IUser {
     return {
       name: user.name,
       age: user.age,
@@ -23,7 +23,7 @@ export class User {
     }
   }
 
-  get GetUserInput(): InputUser {
+  get GetUserInput(): InsertUser {
     return this.user;
   }
 }

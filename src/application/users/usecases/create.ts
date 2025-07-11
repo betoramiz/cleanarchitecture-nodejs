@@ -1,16 +1,19 @@
 ﻿import { Err, Ok, Result } from "ts-results";
-import { ErrorResponse } from "../../../shared/response";
-import { UseCase } from "../../../shared/UseCase";
-import { InputUser, User } from "../../../domain/users/user";
+import { ErrorResponse } from "@shared/response";
+import { UseCase } from "@shared/UseCase";
+import { User } from "@domain/users/user";
 import { IUserRepository } from "../repository";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 export const validationRequest = z.object({
-  name: z.string(),
-  age: z.number(),
+  name: z.string().max(100).nonempty(),
+  age: z.number().nonoptional(),
+  email: z.email().nonempty(),
 });
 
-export interface Request extends InputUser {
+type RequestType = z.infer<typeof  validationRequest>;
+
+export interface Request extends RequestType {
 }
 
 export interface Response {

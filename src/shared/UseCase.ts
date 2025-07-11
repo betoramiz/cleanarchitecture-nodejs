@@ -2,5 +2,5 @@
 import { ErrorResponse } from "./response";
 
 export interface UseCase<T, U> {
-  execute(inputData?: T): Promise<Result<U, ErrorResponse>>;
+  execute(request?: T): Promise<Result<U, ErrorResponse>> | Promise<U> | Promise<void> | U | void;
 }

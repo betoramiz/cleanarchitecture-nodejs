@@ -1,6 +1,6 @@
-import { UseCase } from "../../../shared/UseCase";
+import { UseCase } from "@shared/UseCase";
 import { Err, Ok, Result } from "ts-results";
-import { ErrorResponse } from "../../../shared/response";
+import { ErrorResponse } from "@shared/response";
 import { IUserRepository } from "../repository";
 
 
