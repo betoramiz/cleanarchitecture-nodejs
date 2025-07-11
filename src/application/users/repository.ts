@@ -1,6 +1,6 @@
 ﻿import { InsertUser } from "@domain/users/user";
 import { Result } from "ts-results";
-import { ErrorMessage } from "@shared/response";
+import { ErrorMessage } from "@shared/Responses";
 import { IUser } from "@domain/users/user";
 
 export interface IUserRepository {

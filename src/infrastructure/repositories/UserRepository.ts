@@ -4,10 +4,9 @@ import { Err, Ok, Result } from "ts-results";
 import { usersTable } from "@domain/users/users.schema";
 import { InsertUser, IUser } from "@domain/users/user";
 import { IUserRepository } from "@application/users/repository";
-import { ErrorMessage } from "@shared/response";
+import { DatabaseResponse, ErrorMessage } from "@shared/Responses";
 
 export class UserRepository implements IUserRepository {
-  private errorMessage: ErrorMessage = { name: 'Database Error', description: 'Something failure in the database'};
   async getById(id: number): Promise<Result<IUser|null, ErrorMessage>> {
     try {
       const [user] = await db
@@ -16,7 +15,7 @@ export class UserRepository implements IUserRepository {
         .where(eq(usersTable.id, id));
 
       if(!user) {
-        return  Ok(null);
+        return Ok(user);
       }
 
       return Ok({
@@ -26,8 +25,8 @@ export class UserRepository implements IUserRepository {
         age: user.age
       });
 
-    } catch (error) {
-      return Err(this.errorMessage);
+    } catch (error: any) {
+      return Err(DatabaseResponse.Error(error.cause.detail));
     }
   }
 
@@ -43,8 +42,8 @@ export class UserRepository implements IUserRepository {
 
       return Ok(result);
 
-    } catch (error) {
-      return Err(this.errorMessage);
+    } catch (error: any) {
+      return Err(DatabaseResponse.Error(error.cause.detail));
     }
   }
 
@@ -56,8 +55,8 @@ export class UserRepository implements IUserRepository {
         .returning({ createdId: usersTable.id });
 
       return Ok(result.createdId);
-    } catch (error) {
-      return Err(this.errorMessage);
+    } catch (error: any) {
+      return Err(DatabaseResponse.Error(error.cause.detail));
     }
   }
 

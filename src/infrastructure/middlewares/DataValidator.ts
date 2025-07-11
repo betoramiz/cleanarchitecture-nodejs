@@ -1,5 +1,5 @@
 ﻿import { Request, Response, NextFunction } from 'express';
-import { ErrorMessage } from "@shared/response";
+import { ErrorMessage } from "@shared/Responses";
 import { z } from "zod/v4";
 
 export const validateData = (schema: z.ZodObject<any>) => (req: Request, res: Response, next: NextFunction) => {

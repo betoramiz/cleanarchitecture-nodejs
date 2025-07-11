@@ -1,6 +1,5 @@
 import { UseCase } from "@shared/UseCase";
-import { Err, Ok, Result } from "ts-results";
-import { ErrorResponse } from "@shared/response";
+import { ApiResponse, UseCaseResponse } from "@shared/Responses";
 import { IUserRepository } from "../repository";
 
 
@@ -18,21 +17,22 @@ export class GetByIdUseCase implements UseCase<number, Response> {
   constructor(private readonly repository: IUserRepository) {
   }
 
-  async execute(id?: number): Promise<Result<Response, ErrorResponse>> {
-    if(id === undefined) {
-      return Err(ErrorResponse.InternalError('id is not defined'));
+  async execute(request: number): Promise<ApiResponse> {
+
+    if(!request) {
+      return UseCaseResponse.Validation('Id is not defined or different equals to 0');
     }
 
-    const user = await this.repository.getById(id);
+    const user = await this.repository.getById(request);
     if (user.err) {
-      return Err(ErrorResponse.InternalError(user.val.description));
+      return UseCaseResponse.Failure();
     }
 
     if (!user.val) {
-      return Err(ErrorResponse.NotFound());
+      return UseCaseResponse.NotFound();
     }
 
-    return Ok({
+    return UseCaseResponse.Success({
       id: user.val?.id!,
       name: user.val?.name!
     });

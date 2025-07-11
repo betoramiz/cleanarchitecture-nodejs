@@ -1,5 +1,4 @@
-﻿import { Err, Ok, Result } from "ts-results";
-import { ErrorResponse } from "@shared/response";
+﻿import { ApiResponse, UseCaseResponse } from "@shared/Responses";
 import { UseCase } from "@shared/UseCase";
 import { User } from "@domain/users/user";
 import { IUserRepository } from "../repository";
@@ -8,10 +7,10 @@ import { z } from "zod/v4";
 export const validationRequest = z.object({
   name: z.string().max(100).nonempty(),
   age: z.number().nonoptional(),
-  email: z.email().nonempty(),
+  email: z.email().nonempty()
 });
 
-type RequestType = z.infer<typeof  validationRequest>;
+type RequestType = z.infer<typeof validationRequest>;
 
 export interface Request extends RequestType {
 }
@@ -22,25 +21,23 @@ export interface Response {
 
 export class CreateUseCase implements UseCase<Request, Response> {
 
-  constructor(private readonly userRepository: IUserRepository) {}
+  constructor(private readonly userRepository: IUserRepository) {
+  }
 
-  async execute(input?: Request): Promise<Result<Response, ErrorResponse>> {
-    if (input === undefined) {
-      return Promise.reject(Err(ErrorResponse.InternalError('')));
-    }
+  async execute(request: Request): Promise<ApiResponse> {
 
     const user = new User({
-      name: input.name,
-      age: input.age,
-      email: input.email
+      name: request.name,
+      age: request.age,
+      email: request.email
     });
 
     const created = await this.userRepository.create(user.GetUserInput);
     if (created.err) {
-      return Err(ErrorResponse.InternalError(created.val.description))
+      return UseCaseResponse.Failure(created.val.description);
     }
 
-    return Ok({
+    return UseCaseResponse.Created({
       createdId: created.val
     });
   }

@@ -1,6 +1,5 @@
-﻿import { Result } from "ts-results";
-import { ErrorResponse } from "./response";
+﻿import { ApiResponse } from "./Responses";
 
 export interface UseCase<T, U> {
-  execute(request?: T): Promise<Result<U, ErrorResponse>> | Promise<U> | Promise<void> | U | void;
+  execute(request?: T): Promise<ApiResponse> | ApiResponse
 }

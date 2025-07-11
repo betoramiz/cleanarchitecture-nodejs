@@ -1,6 +1,5 @@
 import { UseCase } from "@shared/UseCase";
-import { Err, Ok, Result } from "ts-results";
-import { ErrorResponse } from "@shared/response";
+import { ApiResponse, UseCaseResponse } from "@shared/Responses";
 import { IUserRepository } from "../repository";
 
 
@@ -9,25 +8,24 @@ export interface Response {
   name: string;
 }
 
-export class ListUseCase implements UseCase<unknown, Response[]> {
+export class ListUseCase implements UseCase<void, Response[]> {
 
   constructor(private readonly repository: IUserRepository) {
   }
 
-  async execute(): Promise<Result<Response[], ErrorResponse>> {
+  async execute(): Promise<ApiResponse> {
     const usersResult = await this.repository.getAll();
 
     if (usersResult.err) {
-      return Err(ErrorResponse.InternalError(usersResult.val.description));
+      return UseCaseResponse.BadRequest(usersResult.val);
     }
-
 
     const response: Response[] = usersResult.val.map(user => ({
       id: user.id!,
       name: user.name!
     }));
 
-    return Ok(response);
+    return UseCaseResponse.Success(response)
   }
 
 
