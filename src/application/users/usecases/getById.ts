@@ -12,12 +12,12 @@ export interface Response {
   name: string;
 }
 
-export class GetByIdUseCase implements UseCase<number> {
+export class GetByIdUseCase implements UseCase<number, Response> {
 
   constructor(private readonly repository: IUserRepository) {
   }
 
-  async execute(request: number): Promise<ApiResponse> {
+  async execute(request: number): Promise<ApiResponse<Response>> {
 
     if(!request) {
       return UseCaseResponse.Validation('Id is not defined or different equals to 0');

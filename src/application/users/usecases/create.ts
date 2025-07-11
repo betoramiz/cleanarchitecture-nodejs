@@ -19,12 +19,12 @@ export interface Response {
   createdId: number;
 }
 
-export class CreateUseCase implements UseCase<Request> {
+export class CreateUseCase implements UseCase<Request, Response> {
 
   constructor(private readonly userRepository: IUserRepository) {
   }
 
-  async execute(request: Request): Promise<ApiResponse> {
+  async execute(request: Request): Promise<ApiResponse<Response>> {
 
     const user = new User({
       name: request.name,

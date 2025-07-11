@@ -9,12 +9,12 @@ export interface Response {
   email: string;
 }
 
-export class ListUseCase implements UseCase<void> {
+export class ListUseCase implements UseCase<void, Response[]> {
 
   constructor(private readonly repository: IUserRepository) {
   }
 
-  async execute(): Promise<ApiResponse> {
+  async execute(): Promise<ApiResponse<Response[]>> {
     const usersResult = await this.repository.getAll();
 
     if (usersResult.err) {
