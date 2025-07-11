@@ -6,9 +6,10 @@ import { IUserRepository } from "../repository";
 export interface Response {
   id: number;
   name: string;
+  email: string;
 }
 
-export class ListUseCase implements UseCase<void, Response[]> {
+export class ListUseCase implements UseCase<void> {
 
   constructor(private readonly repository: IUserRepository) {
   }
@@ -22,7 +23,8 @@ export class ListUseCase implements UseCase<void, Response[]> {
 
     const response: Response[] = usersResult.val.map(user => ({
       id: user.id!,
-      name: user.name!
+      name: user.name!,
+      email: user.email!,
     }));
 
     return UseCaseResponse.Success(response)

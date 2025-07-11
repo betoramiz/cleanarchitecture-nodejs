@@ -6,10 +6,11 @@ export interface ErrorMessage {
 }
 
 export type StatusResponse = 'success' | 'failure';
-export interface ApiResponse {
+
+export interface ApiResponse<T> {
   status: StatusResponse;
   code: number;
-  data?: unknown | ErrorMessage | ErrorMessage[];
+  data?: T | ErrorMessage | ErrorMessage[];
 }
 
 
@@ -37,7 +38,7 @@ export class DatabaseResponse {
 }
 
  export class UseCaseResponse {
-  static Success<T>(data?: T): ApiResponse {
+  static Success<T>(data?: T): ApiResponse<T> {
     return {
       status: 'success',
       code: StatusCodes.OK,
@@ -45,7 +46,7 @@ export class DatabaseResponse {
     }
   }
 
-   static Created<T>(data: T): ApiResponse{
+   static Created<T>(data: T): ApiResponse<T> {
      return {
        status: 'success',
        code: StatusCodes.CREATED,
@@ -53,7 +54,7 @@ export class DatabaseResponse {
      }
    }
 
-   static BadRequest(message: ErrorMessage): ApiResponse{
+   static BadRequest<T>(message: ErrorMessage): ApiResponse<T> {
      return {
        status: 'failure',
        code: StatusCodes.BAD_REQUEST,
@@ -61,33 +62,33 @@ export class DatabaseResponse {
      }
    }
 
-   static Validation(message: string): ApiResponse{
+   static Validation<T>(message: string): ApiResponse<T> {
      return {
        status: 'failure',
        code: StatusCodes.BAD_REQUEST,
-       data: <ErrorMessage> {
+       data: <ErrorMessage>{
          name: ReasonPhrases.BAD_REQUEST,
          description: message
        }
      }
    }
 
-   static NotFound(message: string = 'Resource not found'): ApiResponse{
+   static NotFound<T>(message: string = 'Resource not found'): ApiResponse<T> {
      return {
        status: 'failure',
        code: StatusCodes.NOT_FOUND,
-       data: <ErrorMessage> {
+       data: <ErrorMessage>{
          name: ReasonPhrases.NOT_FOUND,
          description: message
        }
      }
    }
 
-   static Failure(message: string = 'Unexpected Error happened'): ApiResponse{
+   static Failure<T>(message: string = 'Unexpected Error happened'): ApiResponse<T> {
      return {
        status: 'failure',
        code: StatusCodes.INTERNAL_SERVER_ERROR,
-       data: <ErrorMessage> {
+       data: <ErrorMessage>{
          name: ReasonPhrases.INTERNAL_SERVER_ERROR,
          description: message
        }

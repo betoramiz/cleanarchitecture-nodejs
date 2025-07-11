@@ -1,10 +1,11 @@
-﻿import { InsertUser } from "@domain/users/user";
-import { Result } from "ts-results";
+﻿import { Result } from "ts-results";
 import { ErrorMessage } from "@shared/Responses";
-import { IUser } from "@domain/users/user";
+import { InsertUser, IUser } from "@domain/users/user";
+import { IWriteRepository } from "@application/common/IWriteRepository";
+import { usersTable } from "@domain/users/users.schema";
 
-export interface IUserRepository {
-  create(user: InsertUser): Promise<Result<number, ErrorMessage>>;
+export interface IUserRepository extends IWriteRepository<typeof usersTable, InsertUser> {
+  // create(user: InsertUser): Promise<Result<number, ErrorMessage>>;
   getById(id: number): Promise<Result<IUser|null, ErrorMessage>>;
   getAll(): Promise<Result<IUser[], ErrorMessage>>;
 }

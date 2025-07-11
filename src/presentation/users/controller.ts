@@ -6,13 +6,15 @@ import {
 import { Request as GetByIdRequest } from '@application/users/usecases/getById';
 import { ListUseCase } from "@application/users/usecases/list";
 import { GetByIdUseCase } from "@application/users/usecases/getById";
+import { UpdateNameUseCase, Request as UpdateRequest } from "@application/users/usecases/updateName";
 
 export function UserController(
-  { createUseCase, listUseCase, getByIdUseCase }
+  { createUseCase, listUseCase, getByIdUseCase, updateNameUseCase }
   : {
     createUseCase: CreateUseCase,
     listUseCase: ListUseCase,
-    getByIdUseCase: GetByIdUseCase
+    getByIdUseCase: GetByIdUseCase,
+    updateNameUseCase: UpdateNameUseCase,
   }) {
 
   const create = async (request: Request<any, any, CreateRequest>, response: Response) => {
@@ -32,10 +34,18 @@ export function UserController(
     response.status(code).json(data);
   }
 
+  const updateName = async (request: Request, response: Response) => {
+    const { id } = request.params;
+    const req: UpdateRequest = { id: Number(id), data: request.body };
+    const { code, data } = await updateNameUseCase.execute(req);
+    response.status(code).json(data);
+  }
+
 
   return {
     create,
     list,
-    getById
+    getById,
+    updateName
   }
 }

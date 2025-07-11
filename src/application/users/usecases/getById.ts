@@ -12,7 +12,7 @@ export interface Response {
   name: string;
 }
 
-export class GetByIdUseCase implements UseCase<number, Response> {
+export class GetByIdUseCase implements UseCase<number> {
 
   constructor(private readonly repository: IUserRepository) {
   }

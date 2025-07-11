@@ -19,7 +19,7 @@ export interface Response {
   createdId: number;
 }
 
-export class CreateUseCase implements UseCase<Request, Response> {
+export class CreateUseCase implements UseCase<Request> {
 
   constructor(private readonly userRepository: IUserRepository) {
   }

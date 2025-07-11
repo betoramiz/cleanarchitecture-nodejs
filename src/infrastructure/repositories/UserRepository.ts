@@ -1,20 +1,27 @@
-﻿import { db } from '../dbConfig';
+﻿import { db } from "../dbConfig";
 import { eq } from "drizzle-orm";
 import { Err, Ok, Result } from "ts-results";
 import { usersTable } from "@domain/users/users.schema";
 import { InsertUser, IUser } from "@domain/users/user";
 import { IUserRepository } from "@application/users/repository";
 import { DatabaseResponse, ErrorMessage } from "@shared/Responses";
+import { WriteRepository } from "@repositories/WriteRepository";
+import { NodePgDatabase } from "drizzle-orm/node-postgres";
 
-export class UserRepository implements IUserRepository {
-  async getById(id: number): Promise<Result<IUser|null, ErrorMessage>> {
+export class UserRepository extends WriteRepository<typeof usersTable, InsertUser> implements IUserRepository {
+
+  constructor(database: NodePgDatabase, table: typeof usersTable) {
+    super(database, table);
+  }
+
+  async getById(id: number): Promise<Result<IUser | null, ErrorMessage>> {
     try {
       const [user] = await db
         .select()
         .from(usersTable)
         .where(eq(usersTable.id, id));
 
-      if(!user) {
+      if (!user) {
         return Ok(user);
       }
 
@@ -46,18 +53,4 @@ export class UserRepository implements IUserRepository {
       return Err(DatabaseResponse.Error(error.cause.detail));
     }
   }
-
-  async create(user: InsertUser): Promise<Result<number, ErrorMessage>> {
-    try {
-      const [result] = await db
-        .insert(usersTable)
-        .values(user)
-        .returning({ createdId: usersTable.id });
-
-      return Ok(result.createdId);
-    } catch (error: any) {
-      return Err(DatabaseResponse.Error(error.cause.detail));
-    }
-  }
-
 }

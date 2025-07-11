@@ -23,6 +23,10 @@ export class User {
     }
   }
 
+  changeName(name: string) {
+    this.user.name = name;
+  }
+
   get GetUserInput(): InsertUser {
     return this.user;
   }
