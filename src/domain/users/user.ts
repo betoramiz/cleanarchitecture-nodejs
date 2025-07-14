@@ -1,21 +1,19 @@
 ﻿import { usersTable } from "./users.schema";
 
-export interface IUser {
-  id?: number;
-  name: string;
-  age: number;
-  email: string;
-}
+export type UserInsert = typeof usersTable.$inferInsert;
+type UserSelect = typeof usersTable.$inferSelect;
 
-export type InsertUser = typeof usersTable.$inferInsert;
+export interface IUser extends  UserSelect {
+
+}
 
 export class User {
   private readonly user: IUser;
-  constructor(user: InsertUser) {
+  constructor(user: IUser) {
     this.user = user;
   }
 
-  static create(user: InsertUser): IUser {
+  static create(user: IUser): Omit<IUser, 'id'> {
     return {
       name: user.name,
       age: user.age,
@@ -27,7 +25,18 @@ export class User {
     this.user.name = name;
   }
 
-  get GetUserInput(): InsertUser {
+  get GetUserInput(): UserInsert {
     return this.user;
+  }
+}
+
+export const mapper = {
+  toDomain: (schema: UserSelect): IUser =>  {
+    return {
+      id: schema.id,
+      age: schema.age,
+      email: schema.email,
+      name: schema.name
+    }
   }
 }

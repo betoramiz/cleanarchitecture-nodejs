@@ -2,13 +2,13 @@
 import { eq } from "drizzle-orm";
 import { Err, Ok, Result } from "ts-results";
 import { usersTable } from "@domain/users/users.schema";
-import { InsertUser, IUser } from "@domain/users/user";
+import { UserInsert, IUser, mapper } from "@domain/users/user";
 import { IUserRepository } from "@application/users/repository";
 import { DatabaseResponse, ErrorMessage } from "@shared/Responses";
 import { WriteRepository } from "@repositories/WriteRepository";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 
-export class UserRepository extends WriteRepository<typeof usersTable, InsertUser> implements IUserRepository {
+export class UserRepository extends WriteRepository<typeof usersTable, UserInsert> implements IUserRepository {
 
   constructor(database: NodePgDatabase, table: typeof usersTable) {
     super(database, table);
@@ -25,12 +25,8 @@ export class UserRepository extends WriteRepository<typeof usersTable, InsertUse
         return Ok(user);
       }
 
-      return Ok({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        age: user.age
-      });
+      const entity = mapper.toDomain(user);
+      return Ok(entity);
 
     } catch (error: any) {
       return Err(DatabaseResponse.Error(error.cause.detail));
